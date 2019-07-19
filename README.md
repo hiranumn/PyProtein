@@ -1,6 +1,8 @@
 # PyProtein
 
-## Getting different types of distance maps
+A bunch of scripts that makes feature extraction easier from pdbs.
+
+## Example: getting different types of distance maps
 ```
 import pyprotein as pyp
 from pyrosetta import *
