@@ -1,6 +1,6 @@
 # PyProtein
 
-## Getting different types of distannce maps
+## Getting different types of distance maps
 ```
 # Load a pdb file using pyrosetta
 pose = Pose()
