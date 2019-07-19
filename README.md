@@ -2,6 +2,9 @@
 
 ## Getting different types of distance maps
 ```
+import pyprotein as pyp
+from pyrosetta import *
+
 # Load a pdb file using pyrosetta
 pose = Pose()
 pose_from_file(pose, "/net/scratch/hiranumn/raw_relaxed/1ezgA/tag0001.al_0001.pdb")
