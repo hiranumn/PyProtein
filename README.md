@@ -2,11 +2,13 @@
 
 A bunch of scripts that makes feature extraction easier from pdbs.
 
-## Example 1: Getting different types of distance maps
 ```
 import pyprotein as pyp
 from pyrosetta import *
+```
 
+## Example 1: Getting different types of distance maps
+```
 # Load a pdb file using pyrosetta
 pose = Pose()
 pose_from_file(pose, "/net/scratch/hiranumn/raw_relaxed/1ezgA/tag0001.al_0001.pdb")
