@@ -23,3 +23,10 @@ x3 = pyp.get_distmaps(pose, atom1=pyp.dict_3LAA_to_tip, atom2=pyp.dict_3LAA_to_t
 # Get Tip to CA distancemap
 x4 = pyp.get_distmaps(pose, atom1=pyp.dict_3LAA_to_tip, atom2="CA")
 ```
+
+## Example2: Getting Euler angles of rigid body transformation between two residues
+```
+pose = Pose()
+pose_from_file(pose, "/net/scratch/hiranumn/raw_relaxed/1ezgA/tag0001.al_0001.pdb")
+output = pyp.getEulerOrientation(pose)  
+```
