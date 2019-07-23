@@ -10,6 +10,8 @@ fa_scorefxn = get_fa_scorefxn()
 ```
 
 ## get_distmaps(pose, atom1, atom2, default)
+This function returns a distance map between specified atoms of pairs of residues.
+You can also specify which atom to use per resdiue basis using a dictionary.
 ``` Python
 # Get CB to CB distance map use CA if CB does not exist
 x = pyp.get_distmaps(pose, atom1="CB", atom2="CB", default="CA")
