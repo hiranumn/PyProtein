@@ -46,6 +46,5 @@ output = pyp.getEulerOrientation(pose)
 This function gets 1 body and 2 body energy of pose given an energy function.
 It returns a tuple of (num_res, 1) and (num_res, num_res) matrices.
 ``` Python
-# Get energy map
 output = pyp.getEnergy(pose, fa_scorefxn)
 ```
