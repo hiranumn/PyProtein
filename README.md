@@ -26,5 +26,6 @@ x4 = pyp.get_distmaps(pose, atom1=pyp.dict_3LAA_to_tip, atom2="CA")
 
 ## Example2: Getting Euler angles of rigid body transformation between two residues
 ```
+# Get sine and cosine of 6 angles per residue. This returns (num_res, 12) matrix.
 output = pyp.getEulerOrientation(pose)  
 ```
