@@ -1,17 +1,11 @@
 import numpy as np
 import pyrosetta
 import pickle
-from scipy.spatial import distance
-
-# Gets CA distance map given a pose.
-def get_CA_distmaps(pose):
-    p = pose
-    ca = np.array([p.residue(i).xyz("CA") for i in range(1, p.size() + 1)])
-    dev = np.linalg.norm(ca[:, None, :] - ca[None, :, :], axis=-1)
-    return dev
+from scipy.spatial import distance, distance_matrix
+from .conversion import *
 
 # Gets distance for various atoms given a pose
-def get_distmaps(pose, atom1="CA", atom2="CA", default="CA"):
+def get_distmap_deprecated(pose, atom1="CA", atom2="CA", default="CA"):
     out = np.zeros((pose.size(), pose.size()))
     for i in range(1, pose.size()+1):
         for j in range(1, pose.size()+1):
@@ -37,8 +31,34 @@ def get_distmaps(pose, atom1="CA", atom2="CA", default="CA"):
             out[i-1, j-1] = dist
     return out
 
+# Gets distance for various atoms given a pose
+def get_distmaps(pose, atom1="CA", atom2="CA", default="CA"):
+    psize = pose.size()
+    xyz1 = np.zeros((psize, 3))
+    xyz2 = np.zeros((psize, 3))
+    for i in range(1, psize+1):
+        r = pose.residue(i)
+        
+        if type(atom1) == str:
+            if r.has(atom1):
+                xyz1[i-1, :] = np.array(r.xyz(atom1))
+            else:
+                xyz1[i-1, :] = np.array(r.xyz(default))
+        else:
+            xyz1[i-1, :] = np.array(r.xyz(atom1.get(r.name(), default)))
+    
+        if type(atom2) == str:
+            if r.has(atom2):
+                xyz2[i-1, :] = np.array(r.xyz(atom2))
+            else:
+                xyz2[i-1, :] = np.array(r.xyz(default))
+        else:
+            xyz2[i-1, :]  = np.array(r.xyz(atom2.get(r.name(), default)))
+
+    return distance_matrix(xyz1, xyz2)
+
 # Gets torsions given a pose
-def get_torsions(pose):
+def getTorsions(pose):
     p = pose
     torsions=np.zeros((p.size(),3))
     for i in range(p.total_residue()):
@@ -70,7 +90,7 @@ def getEulerOrientation(pose):
     rot_z = np.deg2rad(rot_z)
     
     # Getting sin and consine of respective angles
-    output = np.concatenate([np.sin(trans_z), np.cos(trans_z), np.sin(rot_z), np.cos(rot_z)], axis=2)
+    output = np.concatenate([trans_z, rot_z], axis=2)
     return output
 
 # Given a pose and scorefunction, returns one body and two body terms of totalE.
@@ -101,3 +121,11 @@ def getEnergy(p, scorefxn):
                 res_pair_energy_z[i-1][j-1]= edge.fill_energy_map().dot(scorefxn.weights())
                 
     return res_energy_no_two_body_z, res_pair_energy_z
+
+# Get 1 hot encoded aminoacides
+def get1hotAA(pose, indecies=dict_1LAA_to_num):
+    AAs = [i.split(":")[0] for i in get_sequence(pose)]
+    output = np.zeros((pose.size(), len(dict_1LAA_to_num)))
+    for i in range(len(AAs)):
+        output[i, indecies[dict_3LAA_to_1LAA[AAs[i]]]] = 1
+    return output
